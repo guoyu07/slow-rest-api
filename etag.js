@@ -42,7 +42,7 @@ function etag (entity, opts) {
 
   if (!opts.output || opts.output === 'base64') {
     try {
-      hash = hash
+      hash = hash && hash
         .digest('base64')
         .replace(/=+$/, '')
     } catch (e) {
@@ -54,7 +54,7 @@ function etag (entity, opts) {
   }
 
   try {
-    hash = hash.digest(opts.output)
+    hash = hash && hash.digest(opts.output)
   } catch (e) {
     error = true
   }
