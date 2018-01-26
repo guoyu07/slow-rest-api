@@ -1,4 +1,9 @@
 'use strict'
+const bunyan = require('bunyan')
+
+global.logger = bunyan.createLogger({
+  name: 'category-subcategory-ad-migration'
+});
 
 var etag = require('./etag')
 var pkg = JSON.stringify(require('./package.json'))
