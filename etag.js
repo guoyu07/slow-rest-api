@@ -6,7 +6,7 @@ var etagCache = require('./etag-cache.json')
 
 module.exports = etag
 
-function etag (entity, opts) {
+function etag(entity, opts) {
   if (Object(entity) === entity) {
     opts = entity
     entity = opts.entity
@@ -20,14 +20,14 @@ function etag (entity, opts) {
 
   var match
 
-/*   Object.keys(etagCache).forEach(function (k) {
-    match = (etagCache[k].algorithm === opts.algorithm &&
-      etagCache[k].encoding === opts.encoding &&
-      etagCache[k].output === opts.output &&
-      entity === Buffer.from(etagCache[k].content.data).toString()) &&
-      k
-  })
- */
+  /*   Object.keys(etagCache).forEach(function (k) {
+      match = (etagCache[k].algorithm === opts.algorithm &&
+        etagCache[k].encoding === opts.encoding &&
+        etagCache[k].output === opts.output &&
+        entity === Buffer.from(etagCache[k].content.data).toString()) &&
+        k
+    })
+   */
   if (match) { return match }
 
   var hash
@@ -36,30 +36,18 @@ function etag (entity, opts) {
     hash = crypto
       .createHash(opts.algorithm)
       .update(entity, opts.encoding)
-  } catch (e) {
-    error = true
-  }
 
-  if (!opts.output || opts.output === 'base64') {
-    try {
+    if (!opts.output || opts.output === 'base64') {
       hash = hash && hash
         .digest('base64')
         .replace(/=+$/, '')
-    } catch (e) {
-      error = true
+      if (hash) {
+        return hash
+      }
+      hash = hash && hash.digest(opts.output)
     }
-    if (!error) {
-      return hash
-    }
-  }
 
-  try {
-    hash = hash && hash.digest(opts.output)
   } catch (e) {
-    error = true
-  }
-
-  if (error) {
     return Error('oh oh')
   }
 
