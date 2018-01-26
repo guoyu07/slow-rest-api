@@ -20,14 +20,14 @@ function etag (entity, opts) {
 
   var match
 
-  Object.keys(etagCache).forEach(function (k) {
+/*   Object.keys(etagCache).forEach(function (k) {
     match = (etagCache[k].algorithm === opts.algorithm &&
       etagCache[k].encoding === opts.encoding &&
       etagCache[k].output === opts.output &&
       entity === Buffer.from(etagCache[k].content.data).toString()) &&
       k
   })
-
+ */
   if (match) { return match }
 
   var hash
@@ -48,7 +48,6 @@ function etag (entity, opts) {
     } catch (e) {
       error = true
     }
-
     if (!error) {
       return hash
     }
