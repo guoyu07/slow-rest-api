@@ -22,8 +22,7 @@
     "autocannon": "^0.16.5",
     "benchmark": "^2.1.1",
     "bunyan": "^1.8.12",
-    "microtime": "^2.1.1",
-    "restify": "^5.0.0"
+    "microtime": "^2.1.1"
   },
   "devDependencies": {
     "nodemon": "^1.14.11",
