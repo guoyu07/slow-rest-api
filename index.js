@@ -8,44 +8,52 @@ global.logger = bunyan.createLogger({
 var etag = require('./etag')
 var pkg = JSON.stringify(require('./package.json'))
 
-var http = require('http')
-var count = 1
-var server = http.createServer((req, res) => {
-  switch (req.url) {
-    case '/a':
-      var tag = etag(pkg + ++count)
+// Require the framework and instantiate it
+const fastify = require('fastify')()
 
-      if (!(tag instanceof Error)) {
-        res.setHeader('ETag', tag)
-      }
+// Declare a route
+fastify.get('/a', async (request, reply) => {
+  var tag = etag(pkg + ++count)
 
-      res.end(pkg)
-      break;
-    case '/b':
-      var tag = etag({ entity: pkg + ++count, algorithm: 'sha256' })
-
-      if (!(tag instanceof Error)) {
-        res.setHeader('ETag', tag)
-      }
-
-      res.end(pkg)
-      break
-    case '/c':
-      var tag = etag(pkg + ++count, { algorithm: 'sha512WithRsaEncryption' })
-
-      if (!(tag instanceof Error)) {
-        res.setHeader('ETag', tag)
-      }
-
-      res.end(pkg)
-      break
-    default:
-      res.end('Not a valid route')
-      break;
+  if (!(tag instanceof Error)) {
+    res.setHeader('ETag', tag)
   }
+
+
+  return pkg
 })
 
-server.listen(3000)
+fastify.get('/b', async (request, reply) => {
+  var tag = etag({ entity: pkg + ++count, algorithm: 'sha256' })
+
+  if (!(tag instanceof Error)) {
+    res.setHeader('ETag', tag)
+  }
+
+  return pkg
+})
+
+fastify.get('/c', async (request, reply) => {
+  var tag = etag(pkg + ++count, { algorithm: 'sha512WithRsaEncryption' })
+
+  if (!(tag instanceof Error)) {
+    res.setHeader('ETag', tag)
+  }
+
+  return pkg
+})
+
+// Run the server!
+const start = async () => {
+  try {
+    await fastify.listen(3000)
+    fastify.log.info(`server listening on ${fastify.server.address().port}`)
+  } catch (err) {
+    fastify.log.error(err)
+    process.exit(1)
+  }
+}
+start()
 
 var signal = 'SIGINT'
 

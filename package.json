@@ -22,6 +22,7 @@
     "autocannon": "^0.16.5",
     "benchmark": "^2.1.1",
     "bunyan": "^1.8.12",
+    "fastify": "^0.40.0",
     "microtime": "^2.1.1"
   },
   "devDependencies": {
