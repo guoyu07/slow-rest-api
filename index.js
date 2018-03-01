@@ -10,7 +10,7 @@ var pkg = JSON.stringify(require('./package.json'))
 
 // Require the framework and instantiate it
 const fastify = require('fastify')()
-
+var count = 1
 // Declare a route
 fastify.get('/a', async (request, reply) => {
   var tag = etag(pkg + ++count)
